@@ -10,26 +10,35 @@ Goal
 - Have livereload work with coffee-script files and html templates
 - Have node serve our staticfiles in development as it is way faster than
   django's runserver
+- Give the flexibility that compressor provides, linking arbitrary files in certain templates and locations
 
-Where django-compressor fails
-=============================
+Where django-compressor falls short
+===================================
 
 - Slow compile and reload
 - No css injection with livereload
+- Not the tools that grunt provides (autoprefixer, uglify, etc)
+- Inlining assets
 
 How it works
 ============
 
-1. Put your static where you normaly do, e.g. in a top level 'static' or
+1. Put your static where you normally do, e.g. in a top level 'static' or
    'assets' dir, or in the 'static' dir in your app.
 2. Configure the paths in your gruntfile.
-3. Add the `{% load grunted_assets %}` to your (base) template and load the css
-   with: `{% assets css %}` and the js (surprisingly) with `{% assets js %}`.
-3. Run grunt (see below).
-4. Run `django-admin.py collectstatic`
+3. Add `{% load grunted_assets %}` to your (base) template and link the
+   assets you want to load with: `{% link_asset 'script.js' %}`
+4. Run grunt (see below).
+5. Run `django-admin.py collectstatic`
 
-The `assets` template tag gets the files needed from the `asset-manifest.json`
-file, that is either placed in `.tmp` (development) or `dist` (production).
+The `link_asset` template tag (or the `inline_asset` tag), searches for the
+files in either `.tmp` (development) or `dist` (production) within
+`STATIC_ROOT`.
+
+The argument you pass to `link_asset` of `inline_asset` is treated as a regex. A
+simple `main.css` therefore works, but using `.*main\.js` for example, you can
+also match files processed with something like
+`grunt-rev<https://www.npmjs.com/package/grunt-rev>`_.
 
 Development
 -----------
@@ -50,18 +59,3 @@ specify in your gruntfile.
 
 On the server run `django-admin.py collectstatic` to have all static files
 collected to the proper place.
-
-TODO
-----
-
-- What to do with static files from other django apps? Leave them for now.
-  Mostly admin, and that isn't high traffic frontend. And you don't change those
-  files. If you do want to incorporate them, include them in your grunt file!
-- django management command that enables grunt to know where certain static
-  files of apps live.
-
-Maybe helpful?
---------------
-
-- https://github.com/vanetix/grunt-asset-revisions/blob/master/tasks/revisions.js
-- https://github.com/verbling/assetflow#grunt-task-assetsbundle
