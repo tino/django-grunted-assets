@@ -20,7 +20,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     url='https://github.com/tino/django-grunted-assets',
-    license='MIT',
+    license='See LICENSE.txt',
     description=' '.join(__import__('grunted_assets').__doc__.splitlines()).strip(),
     classifiers=[
         'Intended Audience :: Developers',
