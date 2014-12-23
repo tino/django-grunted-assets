@@ -52,3 +52,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Node stuff
+node_modules
+
+# assets developement dir
+.tmp
