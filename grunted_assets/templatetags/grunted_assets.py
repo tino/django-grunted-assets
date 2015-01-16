@@ -87,3 +87,9 @@ def inline_asset(filename_re):
                                                                      ext))
     return HTML_TAGS_INLINE[ext].format(storage.open(asset).read())
 
+
+@register.simple_tag
+def asset_path(filename_re):
+    """Return just the path, so you can use it in other tags."""
+    asset, storage = find_asset(filename_re)
+    return static(asset)
